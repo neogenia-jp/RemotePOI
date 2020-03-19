@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XlsManiSvc", "XlsManiSvc\XlsManiSvc.csproj", "{4456BD04-2B3A-4495-8BC3-2B9ADB116D11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4456BD04-2B3A-4495-8BC3-2B9ADB116D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4456BD04-2B3A-4495-8BC3-2B9ADB116D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4456BD04-2B3A-4495-8BC3-2B9ADB116D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4456BD04-2B3A-4495-8BC3-2B9ADB116D11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D8678FE-6ED0-4041-A5B1-4A350AAC9C50}
+	EndGlobalSection
+EndGlobal

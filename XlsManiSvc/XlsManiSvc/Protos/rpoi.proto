@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+// import pre-defined data types. https://github.com/protocolbuffers/protobuf/tree/v3.1.0/src/google/protobuf
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "XlsManiSvc";
+
+package rpoi;
+
+// The remote POI service definition.
+service RemotePOI {
+  // Load & Save the Book.
+  rpc UploadTemplate (google.protobuf.BytesValue) returns (google.protobuf.Empty);
+  rpc UseTemplateFile (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc Download (google.protobuf.Empty) returns (google.protobuf.BytesValue);
+
+  // Control the sheet.
+  rpc GetSheetsCount (google.protobuf.Empty) returns (google.protobuf.Int32Value);
+  rpc GetSheetName (google.protobuf.Int32Value) returns (google.protobuf.StringValue);
+  rpc SelectSheetAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc CreateSheet (google.protobuf.StringValue) returns (google.protobuf.Empty);
+
+  // Cell value / type
+  rpc GetCellValueType (CellAddress) returns (CellValueType);
+  rpc GetCellValue (CellAddress) returns (CellValue);
+  rpc SetCellValue (CellAddressWithValue) returns (google.protobuf.Empty);
+}
+
+enum CellValueTypes {
+    numeric = 0;
+    string = 1;
+    formula = 2;
+    blank = 3;
+    boolean = 4;
+    dateTime = 5;
+    error = 6;
+    unknown = -1;
+}
+
+message CellValueType {
+    CellValueTypes value = 1;
+}
+
+message CellValue {
+    CellValueTypes valueType = 1;
+    bool is_blank = 2;
+    double numeric_value = 3;
+    string string_value = 4;
+    bool bool_value = 5;
+    google.protobuf.Timestamp date_time_value = 6;
+    uint32 error_value = 7;
+}
+
+message CellAddress {
+    int32 row = 1;
+    int32 col = 2;
+}
+
+message CellAddressWithValue {
+    int32 row = 1;
+    int32 col = 2;
+    CellValue value = 3;
+}
+

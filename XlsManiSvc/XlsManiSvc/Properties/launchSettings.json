@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "XlsManiSvc": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://0.0.0.0:50051"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "commandLineArgs": "-m 50m --memory-swap 256m",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  }
+}
