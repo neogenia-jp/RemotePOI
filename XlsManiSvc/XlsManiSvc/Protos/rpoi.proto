@@ -29,14 +29,14 @@ service RemotePOI {
 }
 
 enum CellValueTypes {
-    numeric = 0;
-    string = 1;
-    formula = 2;
-    blank = 3;
-    boolean = 4;
-    dateTime = 5;
-    error = 6;
-    unknown = -1;
+    Numeric = 0;
+    String = 1;
+    Formula = 2;
+    Blank = 3;
+    Boolean = 4;
+    DateTime = 5;
+    Error = 6;
+    Unknown = -1;
 }
 
 message CellValueType {
