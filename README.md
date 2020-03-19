@@ -1,6 +1,16 @@
 # RemotePOI
 The gRPC Service for IO to xls/xlsx files using NPOI.
 
+## ASP.NET Core gRPC service
+
+How to build service as docker image.
+
+```
+docker build --no-cache -t rpoi_svc .
+docker run -ti -p 37722:80 -v ${PWD}/sample_template:/mnt rpoi_svc
+```
+
+## Ruby client
 
 How to run ruby sample client.
 
