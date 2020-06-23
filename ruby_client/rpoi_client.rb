@@ -1,8 +1,12 @@
-require_relative 'lib/rpoi_services_pb'
+this_dir = File.expand_path(File.dirname(__FILE__))
+lib_dir = File.join(this_dir, 'lib')
+$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
-def main(host)
+require 'rpoi_services_pb'
+
+def main(host, output_path)
   stub = Rpoi::RemotePOI::Stub.new(host, :this_channel_is_insecure)
-  stub.use_template_file(Google::Protobuf::StringValue.new value: '/mnt/est_template_20200313.xls')
+  stub.use_template_file(Google::Protobuf::StringValue.new value: '/mnt/est_template.xls')
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 10, col: 1, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::String, string_value: 'SDA-36'))
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 10, col: 3, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::Numeric, numeric_value: 20))
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 11, col: 1, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::String, string_value: 'SDA-27'))
@@ -14,15 +18,17 @@ def main(host)
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 14, col: 1, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::String, string_value: 'SDA-36'))
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 14, col: 3, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::Numeric, numeric_value: 650))
   bytes = stub.download(Google::Protobuf::Empty.new).value
-  num_of_written = IO.binwrite('/tmp/aa.xls', bytes)
-  puts "OK! #{num_of_written} bytes written!"
+  num_of_written = IO.binwrite(output_path, bytes)
+  puts "OK! #{num_of_written} bytes written to '#{output_path}'!"
 end
 
 host = ARGV[0]
 unless host
-  puts "Usage: #{$0} <host>:<port>"
+  puts "Usage: #{$0} <host>:<port> [output_path]"
   exit 1
 end
 
-main(host)
+output_path = ARGV.length >= 2 ? ARGV[1] : '/tmp/aa.xls'
+
+main(host, output_path)
 

@@ -2,7 +2,7 @@
 # Source: rpoi.proto for package 'rpoi'
 
 require 'grpc'
-require_relative 'rpoi_pb'
+require 'rpoi_pb'
 
 module Rpoi
   module RemotePOI
