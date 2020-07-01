@@ -16,20 +16,51 @@ namespace XlsManiSvc
         private readonly ILogger<RemotePOIService> _logger;
         private readonly IMemoryCache _cache;
 
+        private readonly bool _enable_session = false;
+
         public RemotePOIService(ILogger<RemotePOIService> logger, IMemoryCache cache)
         {
             _logger = logger;
             _cache = cache;
+            switch (Environment.GetEnvironmentVariable("ENABLE_MULTI_SESSION"))
+            {
+                case null:
+                case "0":
+                case "no":
+                case "false":
+                case "NO":
+                case "FALSE":
+                    break;
+                default:
+                    _enable_session = true;
+                    break;
+            }
         }
 
         private NPoiWrapper GetOrCreateWrapper(ServerCallContext context)
         {
+            string sid = null;
             var key = context.Peer;
+            if (_enable_session)
+            {
+                key = sid = context.RequestHeaders.FirstOrDefault(x => x.Key == "x-session-id")?.Value ?? context.GetHttpContext().Session.Id;
+            }
+            _logger.LogDebug("Request received. Peer:{0} SessionId:{1} ConnectionId:{2}", context.Peer, sid, context.GetHttpContext().Connection.Id);
+            //foreach (var kv in context.RequestHeaders)
+            //{
+            //    _logger.LogDebug("header {0}: {1}", kv.Key, kv.Value);
+            //}
+            //foreach (var kv in context.GetHttpContext().Request.Cookies)
+            //{
+            //    _logger.LogDebug("cookie {0}: {1}", kv.Key, kv.Value);
+            //}
             return _cache.GetOrCreate(key, entry =>
             {
-                _logger.LogInformation("New connection comming! {0}", context.Peer);
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10);
+                _logger.LogInformation("New connection comming! {0}", key);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60);
                 entry.PostEvictionCallbacks.Add(new PostEvictionCallbackRegistration { EvictionCallback = (k,v,r,s) => _DisposeCache(v as NPoiWrapper) });
+                context.GetHttpContext().Response.Headers.Add("x-session-id", sid);
+                //context.GetHttpContext().Response.Cookies.Append("SESSION_ID", sid);
                 return new NPoiWrapper(_logger);
             });
         }
