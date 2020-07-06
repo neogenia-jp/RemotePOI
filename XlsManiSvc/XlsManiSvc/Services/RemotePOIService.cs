@@ -43,7 +43,7 @@ namespace XlsManiSvc
             var key = context.Peer;
             if (_enable_session)
             {
-                key = sid = context.RequestHeaders.FirstOrDefault(x => x.Key == "x-session-id")?.Value ?? context.GetHttpContext().Session.Id;
+                key = sid = context.RequestHeaders.FirstOrDefault(x => x.Key == "x-session-id")?.Value ?? Guid.NewGuid().ToString();
             }
             _logger.LogDebug("Request received. Peer:{0} SessionId:{1} ConnectionId:{2}", context.Peer, sid, context.GetHttpContext().Connection.Id);
             //foreach (var kv in context.RequestHeaders)

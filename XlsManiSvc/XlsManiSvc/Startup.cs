@@ -21,14 +21,6 @@ namespace XlsManiSvc
             {
                 option.ExpirationScanFrequency = TimeSpan.FromSeconds(5);
             });
-
-            services.AddDistributedMemoryCache();  // Sessionで使用するために必要
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(60);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,8 +32,6 @@ namespace XlsManiSvc
             }
 
             app.UseRouting();
-
-            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
