@@ -24,6 +24,9 @@ module Rpoi
       rpc :GetSheetName, Google::Protobuf::Int32Value, Google::Protobuf::StringValue
       rpc :SelectSheetAt, Google::Protobuf::Int32Value, Google::Protobuf::Empty
       rpc :CreateSheet, Google::Protobuf::StringValue, Google::Protobuf::Empty
+      rpc :RemoveSheetAt, Google::Protobuf::Int32Value, Google::Protobuf::Empty
+      rpc :SetSheetName, IndexAndName, Google::Protobuf::Empty
+      rpc :CloneSheet, IndexAndName, Google::Protobuf::Int32Value
       # Cell value / type
       rpc :GetCellValueType, CellAddress, CellValueType
       rpc :GetCellValue, CellAddress, CellValue

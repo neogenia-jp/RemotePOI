@@ -21,6 +21,9 @@ service RemotePOI {
   rpc GetSheetName (google.protobuf.Int32Value) returns (google.protobuf.StringValue);
   rpc SelectSheetAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
   rpc CreateSheet (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc RemoveSheetAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc SetSheetName (IndexAndName) returns (google.protobuf.Empty);
+  rpc CloneSheet (IndexAndName) returns (google.protobuf.Int32Value);
 
   // Cell value / type
   rpc GetCellValueType (CellAddress) returns (CellValueType);
@@ -62,5 +65,10 @@ message CellAddressWithValue {
     int32 row = 1;
     int32 col = 2;
     CellValue value = 3;
+}
+
+message IndexAndName {
+    int32 index = 1;
+    string name = 2;
 }
 
