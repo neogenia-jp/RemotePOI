@@ -136,6 +136,14 @@ namespace XlsManiSvc
                 return new Empty();
             });
 
+        public override Task<Empty> SetSheetHidden(IndexAndState arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("SetSheetHidden({0})", arg);
+                GetOrCreateWrapper(context).SetSheetHidden(arg.Index, (NPOI.SS.UserModel.SheetState)arg.Index);
+                return new Empty();
+            });
+
         public override Task<Empty> SetSheetName(IndexAndName arg, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {

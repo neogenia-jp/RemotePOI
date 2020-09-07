@@ -81,6 +81,11 @@ namespace XlsManiSvc
             }
         }
 
+        public void SetSheetHidden(int arg, NPOI.SS.UserModel.SheetState s)
+        {
+            book.SetSheetHidden(arg, s);
+        }
+
         public void SetSheetName(int arg, string name)
         {
             book.SetSheetName(arg, name);
