@@ -126,19 +126,29 @@ namespace XlsManiSvc
 
             v.ValueType = cell.GetCellValueType();
             v.IsBlank = type == CellType.Blank;
+            v.StringValue = string.Empty;
 
-            object val = v.ValueType switch
+            switch (v.ValueType)
             {
-                CellValueTypes.Numeric => v.NumericValue = cell.NumericCellValue,
-                CellValueTypes.DateTime => v.DateTimeValue.Seconds = cell.DateCellValue.Ticks,
-                CellValueTypes.String => v.StringValue = cell.StringCellValue,
-                //CeValuellType.Formula => CellValueType.Formula,
-                CellValueTypes.Boolean => v.BoolValue = cell.BooleanCellValue,
-                CellValueTypes.Error => v.ErrorValue = cell.ErrorCellValue,
-                _ => string.Empty,
-            };
-
-            v.StringValue = val.ToString();
+                case CellValueTypes.Numeric:
+                    v.NumericValue = cell.NumericCellValue;
+                    v.StringValue = $"{cell.NumericCellValue}";
+                    break;
+                case CellValueTypes.DateTime:
+                    v.DateTimeValue = cell.DateCellValue.ToTimestamp();
+                    v.StringValue = cell.DateCellValue.ToLongTimeString();
+                    break;
+                case CellValueTypes.String:
+                    v.StringValue = cell.StringCellValue;
+                    break;
+                case CellValueTypes.Boolean:
+                    v.BoolValue = cell.BooleanCellValue;
+                    v.StringValue = cell.BooleanCellValue.ToString();
+                    break;
+                case CellValueTypes.Error:
+                    v.ErrorValue = cell.ErrorCellValue;
+                    break;
+            }
         }
 
         public void SetCellValue(CellAddressWithValue addrv)
