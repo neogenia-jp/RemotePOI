@@ -21,6 +21,10 @@ service RemotePOI {
   rpc GetSheetName (google.protobuf.Int32Value) returns (google.protobuf.StringValue);
   rpc SelectSheetAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
   rpc CreateSheet (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc RemoveSheetAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc SetSheetName (IndexAndName) returns (google.protobuf.Empty);
+  rpc SetSheetHidden (IndexAndState) returns (google.protobuf.Empty);
+  rpc CloneSheet (IndexAndName) returns (google.protobuf.Int32Value);
 
   // Cell value / type
   rpc GetCellValueType (CellAddress) returns (CellValueType);
@@ -37,6 +41,12 @@ enum CellValueTypes {
     DateTime = 5;
     Error = 6;
     Unknown = -1;
+}
+
+enum SheetState {
+    Visible = 0;
+    Hidden = 1;
+    VeryHidden = 2;
 }
 
 message CellValueType {
@@ -64,3 +74,12 @@ message CellAddressWithValue {
     CellValue value = 3;
 }
 
+message IndexAndName {
+    int32 index = 1;
+    string name = 2;
+}
+
+message IndexAndState {
+    int32 index = 1;
+    SheetState state = 2;
+}

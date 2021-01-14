@@ -29,6 +29,14 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :col, :int32, 2
       optional :value, :message, 3, "rpoi.CellValue"
     end
+    add_message "rpoi.IndexAndName" do
+      optional :index, :int32, 1
+      optional :name, :string, 2
+    end
+    add_message "rpoi.IndexAndState" do
+      optional :index, :int32, 1
+      optional :state, :enum, 2, "rpoi.SheetState"
+    end
     add_enum "rpoi.CellValueTypes" do
       value :Numeric, 0
       value :String, 1
@@ -39,6 +47,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :Error, 6
       value :Unknown, -1
     end
+    add_enum "rpoi.SheetState" do
+      value :Visible, 0
+      value :Hidden, 1
+      value :VeryHidden, 2
+    end
   end
 end
 
@@ -47,5 +60,8 @@ module Rpoi
   CellValue = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.CellValue").msgclass
   CellAddress = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.CellAddress").msgclass
   CellAddressWithValue = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.CellAddressWithValue").msgclass
+  IndexAndName = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.IndexAndName").msgclass
+  IndexAndState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.IndexAndState").msgclass
   CellValueTypes = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.CellValueTypes").enummodule
+  SheetState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("rpoi.SheetState").enummodule
 end

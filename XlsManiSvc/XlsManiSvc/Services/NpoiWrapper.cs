@@ -71,6 +71,39 @@ namespace XlsManiSvc
             sheet = book.CreateSheet(name);
         }
 
+        public void RemoveSheetAt(int arg)
+        {
+            var needsMove = book.ActiveSheetIndex == arg;
+            book.RemoveSheetAt(arg);
+            if (needsMove)
+            {
+                sheet = book.GetSheetAt(0);
+            }
+        }
+
+        public void SetSheetHidden(int arg, NPOI.SS.UserModel.SheetState s)
+        {
+            book.SetSheetHidden(arg, s);
+        }
+
+        public void SetSheetName(int arg, string name)
+        {
+            book.SetSheetName(arg, name);
+        }
+
+        public int CloneSheet(int arg, string name)
+        {
+            var s = book.CloneSheet(arg);
+            var idx = book.GetSheetIndex(s.SheetName);
+            SetSheetName(idx, name);
+            return idx;
+        }
+
+        public void SetSheetOrder(string name, int pos)
+        {
+            book.SetSheetOrder(name, pos);
+        }
+
         public CellValueTypes GetCellValueType(CellAddress addr) => sheet.GetRow(addr.Row).GetCell(addr.Col).GetCellValueType();
 
         public CellValue GetCellValue(CellAddress addr)

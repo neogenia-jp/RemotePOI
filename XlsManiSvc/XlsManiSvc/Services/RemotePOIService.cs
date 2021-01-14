@@ -128,6 +128,38 @@ namespace XlsManiSvc
                 return new Empty();
             });
 
+        public override Task<Empty> RemoveSheetAt(Int32Value arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("RemoveSheetAt({0})", arg);
+                GetOrCreateWrapper(context).RemoveSheetAt(arg.Value);
+                return new Empty();
+            });
+
+        public override Task<Empty> SetSheetHidden(IndexAndState arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("SetSheetHidden({0}, {1})", arg.Index, arg.State);
+                GetOrCreateWrapper(context).SetSheetHidden(arg.Index, (NPOI.SS.UserModel.SheetState)arg.State);
+                return new Empty();
+            });
+    
+        public override Task<Empty> SetSheetName(IndexAndName arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("SetSheetName({0}, '{1}')", arg.Index, arg.Name);
+                GetOrCreateWrapper(context).SetSheetName(arg.Index, arg.Name);
+                return new Empty();
+            });
+
+        public override Task<Int32Value> CloneSheet(IndexAndName arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("CloneSheet({0}, '{1}')", arg.Index, arg.Name);
+                var ret = GetOrCreateWrapper(context).CloneSheet(arg.Index, arg.Name);
+                return new Int32Value { Value = ret };
+            });
+
         public override Task<CellValueType> GetCellValueType(CellAddress addr, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
