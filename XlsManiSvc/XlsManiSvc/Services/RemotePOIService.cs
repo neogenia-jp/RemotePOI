@@ -16,35 +16,42 @@ namespace XlsManiSvc
         private readonly ILogger<RemotePOIService> _logger;
         private readonly IMemoryCache _cache;
 
-        private readonly int _session_timeout_sec = 60;
-        private readonly bool _enable_session = false;
+        private static int? _session_timeout_sec;
+        private static bool? _enable_session;
 
         public RemotePOIService(ILogger<RemotePOIService> logger, IMemoryCache cache)
         {
             _logger = logger;
             _cache = cache;
-            switch (Environment.GetEnvironmentVariable("ENABLE_MULTI_SESSION"))
+            if (_enable_session == null)
             {
-                case null:
-                case "0":
-                case "no":
-                case "false":
-                case "NO":
-                case "FALSE":
-                    break;
-                default:
-                    _enable_session = true;
-                    break;
+                switch (Environment.GetEnvironmentVariable("ENABLE_MULTI_SESSION"))
+                {
+                    case null:
+                    case "0":
+                    case "no":
+                    case "false":
+                    case "NO":
+                    case "FALSE":
+                        _enable_session = false;
+                        break;
+                    default:
+                        _enable_session = true;
+                        break;
+                }
             }
-            _session_timeout_sec = int.Parse(Environment.GetEnvironmentVariable("SESSION_TIMEOUT_SEC") ?? "60");
-            _logger.LogInformation("Multisession: {0}, Session timeout: {1} sec", _enable_session, _session_timeout_sec);
+            if (_session_timeout_sec == null)
+            {
+                _session_timeout_sec = int.Parse(Environment.GetEnvironmentVariable("SESSION_TIMEOUT_SEC") ?? "60");
+                _logger.LogInformation("Multisession: {0}, Session timeout: {1} sec", _enable_session, _session_timeout_sec);
+            }
         }
 
         private NPoiWrapper GetOrCreateWrapper(ServerCallContext context)
         {
             string sid = null;
             var key = context.Peer;
-            if (_enable_session)
+            if (_enable_session == true)
             {
                 key = sid = context.RequestHeaders.FirstOrDefault(x => x.Key == "x-session-id")?.Value ?? Guid.NewGuid().ToString();
             }
@@ -60,7 +67,7 @@ namespace XlsManiSvc
             return _cache.GetOrCreate(key, entry =>
             {
                 _logger.LogInformation("New connection comming! {0}", key);
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(_session_timeout_sec);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(_session_timeout_sec ?? 60);
                 entry.PostEvictionCallbacks.Add(new PostEvictionCallbackRegistration { EvictionCallback = (k,v,r,s) => _DisposeCache(v as NPoiWrapper) });
                 context.GetHttpContext().Response.Headers.Add("x-session-id", sid);
                 //context.GetHttpContext().Response.Cookies.Append("SESSION_ID", sid);
