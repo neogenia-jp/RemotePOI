@@ -112,18 +112,22 @@ namespace XlsManiSvc
         public CellValueTypes GetCellValueType(CellAddress addr) => sheet.GetRow(addr.Row).GetCell(addr.Col).GetCellValueType();
 
         public CellValue GetCellValue(CellAddress addr)
-        {
-            var cell = sheet.GetCell(addr.Row, addr.Col);
-            CellValue v = new CellValue();
-            _GetCellValue(cell, v);
+            => _GetCellValue(sheet.GetCell(addr.Row, addr.Col));
+        
+        private static CellValue _CreateBlankCell()
+            => new CellValue()
+            {
+                ValueType = CellValueTypes.Unknown,
+                IsBlank = true,
+                StringValue = string.Empty,
+            };
 
-            return v;
-        }
-
-        private static void _GetCellValue(ICell cell, CellValue v)
+        private static CellValue _GetCellValue(ICell cell)
         {
+            if (cell == null) return _CreateBlankCell();
             var type = cell.CellType;
 
+            CellValue v = new CellValue();
             v.ValueType = cell.GetCellValueType();
             v.IsBlank = type == CellType.Blank;
             v.StringValue = string.Empty;
@@ -146,9 +150,11 @@ namespace XlsManiSvc
                     v.StringValue = cell.BooleanCellValue.ToString();
                     break;
                 case CellValueTypes.Error:
+                    System.Console.WriteLine("row:{0} col:{1}", cell.RowIndex, cell.ColumnIndex);
                     v.ErrorValue = cell.ErrorCellValue;
                     break;
             }
+            return v;
         }
 
         public void SetCellValue(CellAddressWithValue addrv)
