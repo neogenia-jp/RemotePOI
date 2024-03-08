@@ -38,6 +38,10 @@ namespace XlsManiSvc
 
         public Stream Download()
         {
+            // ƒZƒ‹‚ÌŒvZ®‚ğ‚·‚×‚ÄÄŒvZ‚³‚¹‚é
+            //book.SetForceFormulaRecalculation(true);
+            book.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+
             var mem = new MemoryStream();
             book.Write(mem);
             mem.Position = 0;
