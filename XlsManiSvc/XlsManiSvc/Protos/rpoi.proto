@@ -12,9 +12,13 @@ package rpoi;
 // The remote POI service definition.
 service RemotePOI {
   // Load & Save the Book.
-  rpc UploadTemplate (google.protobuf.BytesValue) returns (google.protobuf.Empty);
-  rpc UseTemplateFile (google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc UploadTemplate (google.protobuf.BytesValue) returns (google.protobuf.Empty);    // deprecated
+  rpc UseTemplateFile (google.protobuf.StringValue) returns (google.protobuf.Empty);  // deprecated
   rpc Download (google.protobuf.Empty) returns (google.protobuf.BytesValue);
+
+  rpc FindTemplateByMd5 (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+  rpc UploadTemplateWithMd5 (google.protobuf.BytesValue, google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc UseTemplateByMd5 (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
   // Control the sheet.
   rpc GetSheetsCount (google.protobuf.Empty) returns (google.protobuf.Int32Value);
