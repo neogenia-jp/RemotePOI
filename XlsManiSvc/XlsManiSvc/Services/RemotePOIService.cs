@@ -93,7 +93,7 @@ namespace XlsManiSvc
             => Task.Factory.StartNew(() =>
             {
                 _logger.LogDebug("Download()");
-                var ret = new BytesValue { Value = ByteString.FromStream(GetOrCreateWrapper(context).Download()) };
+                var ret = new BytesValue { Value = ByteString.CopyFrom(GetOrCreateWrapper(context).Download()) };
                 _logger.LogTrace("  --------------------- Current memory usage: {0} bytes ---------------------", Environment.WorkingSet);
                 return ret;
             });
