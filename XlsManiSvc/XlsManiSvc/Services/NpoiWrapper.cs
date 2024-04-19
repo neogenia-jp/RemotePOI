@@ -45,7 +45,7 @@ namespace XlsManiSvc
             using (var mem = new MemoryStream())
             {
                 book.Write(mem);
-                return mem.GetBuffer();
+                return mem.ToArray();
             }
         }
 
