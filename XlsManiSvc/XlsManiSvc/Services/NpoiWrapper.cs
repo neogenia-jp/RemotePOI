@@ -112,33 +112,49 @@ namespace XlsManiSvc
         public CellValueTypes GetCellValueType(CellAddress addr) => sheet.GetRow(addr.Row).GetCell(addr.Col).GetCellValueType();
 
         public CellValue GetCellValue(CellAddress addr)
-        {
-            var cell = sheet.GetCell(addr.Row, addr.Col);
-            CellValue v = new CellValue();
-            _GetCellValue(cell, v);
-
-            return v;
-        }
-
-        private static void _GetCellValue(ICell cell, CellValue v)
-        {
-            var type = cell.CellType;
-
-            v.ValueType = cell.GetCellValueType();
-            v.IsBlank = type == CellType.Blank;
-
-            object val = v.ValueType switch
+            => _GetCellValue(sheet.GetCell(addr.Row, addr.Col));
+        
+        private static CellValue _CreateBlankCell()
+            => new CellValue()
             {
-                CellValueTypes.Numeric => v.NumericValue = cell.NumericCellValue,
-                CellValueTypes.DateTime => v.DateTimeValue.Seconds = cell.DateCellValue.Ticks,
-                CellValueTypes.String => v.StringValue = cell.StringCellValue,
-                //CeValuellType.Formula => CellValueType.Formula,
-                CellValueTypes.Boolean => v.BoolValue = cell.BooleanCellValue,
-                CellValueTypes.Error => v.ErrorValue = cell.ErrorCellValue,
-                _ => string.Empty,
+                ValueType = CellValueTypes.Unknown,
+                IsBlank = true,
+                StringValue = string.Empty,
             };
 
-            v.StringValue = val.ToString();
+        private static CellValue _GetCellValue(ICell cell)
+        {
+            if (cell == null) return _CreateBlankCell();
+            var type = cell.CellType;
+
+            CellValue v = new CellValue();
+            v.ValueType = cell.GetCellValueType();
+            v.IsBlank = type == CellType.Blank;
+            v.StringValue = string.Empty;
+
+            switch (v.ValueType)
+            {
+                case CellValueTypes.Numeric:
+                    v.NumericValue = cell.NumericCellValue;
+                    v.StringValue = $"{cell.NumericCellValue}";
+                    break;
+                case CellValueTypes.DateTime:
+                    v.DateTimeValue = cell.DateCellValue.ToTimestamp();
+                    v.StringValue = cell.DateCellValue.ToLongTimeString();
+                    break;
+                case CellValueTypes.String:
+                    v.StringValue = cell.StringCellValue;
+                    break;
+                case CellValueTypes.Boolean:
+                    v.BoolValue = cell.BooleanCellValue;
+                    v.StringValue = cell.BooleanCellValue.ToString();
+                    break;
+                case CellValueTypes.Error:
+                    System.Console.WriteLine("row:{0} col:{1}", cell.RowIndex, cell.ColumnIndex);
+                    v.ErrorValue = cell.ErrorCellValue;
+                    break;
+            }
+            return v;
         }
 
         public void SetCellValue(CellAddressWithValue addrv)

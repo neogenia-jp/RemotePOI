@@ -43,5 +43,11 @@ namespace XlsManiSvc
             }
             return "(Unknown)";
         }
+
+        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestamp(this DateTime dt)
+        {
+            var dto = new DateTimeOffset(dt, new TimeSpan(10, 0, 0));
+            return new Google.Protobuf.WellKnownTypes.Timestamp() { Seconds = dto.ToUnixTimeSeconds() };
+        }
     }
 }
