@@ -2,36 +2,39 @@
 # Source: rpoi.proto for package 'rpoi'
 
 require 'grpc'
-require 'rpoi_pb'
+require_relative 'rpoi_pb'
 
 module Rpoi
   module RemotePOI
     # The remote POI service definition.
     class Service
 
-      include GRPC::GenericService
+      include ::GRPC::GenericService
 
       self.marshal_class_method = :encode
       self.unmarshal_class_method = :decode
       self.service_name = 'rpoi.RemotePOI'
 
       # Load & Save the Book.
-      rpc :UploadTemplate, Google::Protobuf::BytesValue, Google::Protobuf::Empty
-      rpc :UseTemplateFile, Google::Protobuf::StringValue, Google::Protobuf::Empty
-      rpc :Download, Google::Protobuf::Empty, Google::Protobuf::BytesValue
+      rpc :UploadTemplate, ::Google::Protobuf::BytesValue, ::Google::Protobuf::Empty
+      rpc :UseTemplateFile, ::Google::Protobuf::StringValue, ::Google::Protobuf::Empty
+      rpc :Download, ::Google::Protobuf::Empty, ::Google::Protobuf::BytesValue
+      rpc :GetRecalculationPolicy, ::Google::Protobuf::Empty, ::Rpoi::RecalculationPolicy
+      rpc :SetRecalculationPolicy, ::Rpoi::RecalculationPolicy, ::Google::Protobuf::Empty
       # Control the sheet.
-      rpc :GetSheetsCount, Google::Protobuf::Empty, Google::Protobuf::Int32Value
-      rpc :GetSheetName, Google::Protobuf::Int32Value, Google::Protobuf::StringValue
-      rpc :SelectSheetAt, Google::Protobuf::Int32Value, Google::Protobuf::Empty
-      rpc :CreateSheet, Google::Protobuf::StringValue, Google::Protobuf::Empty
-      rpc :RemoveSheetAt, Google::Protobuf::Int32Value, Google::Protobuf::Empty
-      rpc :SetSheetName, IndexAndName, Google::Protobuf::Empty
-      rpc :SetSheetHidden, IndexAndState, Google::Protobuf::Empty
-      rpc :CloneSheet, IndexAndName, Google::Protobuf::Int32Value
+      rpc :GetSheetsCount, ::Google::Protobuf::Empty, ::Google::Protobuf::Int32Value
+      rpc :GetSheetName, ::Google::Protobuf::Int32Value, ::Google::Protobuf::StringValue
+      rpc :SelectSheetAt, ::Google::Protobuf::Int32Value, ::Google::Protobuf::Empty
+      rpc :CreateSheet, ::Google::Protobuf::StringValue, ::Google::Protobuf::Empty
+      rpc :RemoveSheetAt, ::Google::Protobuf::Int32Value, ::Google::Protobuf::Empty
+      rpc :SetSheetName, ::Rpoi::IndexAndName, ::Google::Protobuf::Empty
+      rpc :SetSheetHidden, ::Rpoi::IndexAndState, ::Google::Protobuf::Empty
+      rpc :CloneSheet, ::Rpoi::IndexAndName, ::Google::Protobuf::Int32Value
       # Cell value / type
-      rpc :GetCellValueType, CellAddress, CellValueType
-      rpc :GetCellValue, CellAddress, CellValue
-      rpc :SetCellValue, CellAddressWithValue, Google::Protobuf::Empty
+      rpc :GetCellValueType, ::Rpoi::CellAddress, ::Rpoi::CellValueType
+      rpc :GetCellValue, ::Rpoi::CellAddress, ::Rpoi::CellValue
+      rpc :SetCellValue, ::Rpoi::CellAddressWithValue, ::Google::Protobuf::Empty
+      rpc :GetMaxRowNum, ::Google::Protobuf::Empty, ::Google::Protobuf::Int32Value
     end
 
     Stub = Service.rpc_stub_class
