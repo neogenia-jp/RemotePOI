@@ -12,11 +12,18 @@ namespace XlsManiSvc
 {
     public class Startup
     {
+        public readonly int GRPC_MAX_RECEIVE_MESSAGE_LENGTH = 20 * 1024 * 1024;  // デフォルトの送受信メッセージサイズ上限: 20MB
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc();
+            services.AddGrpc(options =>
+            {
+                // https://learn.microsoft.com/en-us/aspnet/core/grpc/security?view=aspnetcore-8.0#message-size-limits
+                options.MaxReceiveMessageSize = GRPC_MAX_RECEIVE_MESSAGE_LENGTH;
+                options.MaxSendMessageSize = GRPC_MAX_RECEIVE_MESSAGE_LENGTH;
+            });
             services.AddMemoryCache(option =>
             {
                 option.ExpirationScanFrequency = TimeSpan.FromSeconds(5);

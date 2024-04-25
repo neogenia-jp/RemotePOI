@@ -22,6 +22,7 @@ namespace XlsManiSvc
 
         IWorkbook book;
         ISheet sheet;
+        public RecalculationPolicies recalculationPolicy { get; set; } = RecalculationPolicies.ForceEvaluate;
 
         public void LoadTemplateFromData(Stream data)
         {
@@ -38,9 +39,17 @@ namespace XlsManiSvc
 
         public byte[] Download()
         {
-            // �Z���̌v�Z�������ׂčČv�Z������
-            //book.SetForceFormulaRecalculation(true);
-            book.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+            switch (recalculationPolicy)
+            {
+                case RecalculationPolicies.SetFlag:
+                    // Excelアプリで開いたときに再計算させるフラグを立てる
+                    (book as NPOI.XSSF.UserModel.XSSFWorkbook)?.SetForceFormulaRecalculation(true);
+                    break;
+                case RecalculationPolicies.ForceEvaluate:
+                    // セルの計算式をすべて再計算する
+                    book.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
+                    break;
+            }
 
             using (var mem = new MemoryStream())
             {

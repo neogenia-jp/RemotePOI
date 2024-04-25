@@ -108,6 +108,19 @@ namespace XlsManiSvc
                 return ret;
             });
 
+        public override Task<RecalculationPolicy> GetRecalculationPolicy(Empty _, ServerCallContext context)
+                  => Task.Factory.StartNew(() =>
+                  {
+                      return new RecalculationPolicy { Value = GetOrCreateWrapper(context).recalculationPolicy };
+                  });
+
+        public override Task<Empty> SetRecalculationPolicy(RecalculationPolicy p, ServerCallContext context)
+                  => Task.Factory.StartNew(() =>
+                  {
+                      GetOrCreateWrapper(context).recalculationPolicy = p.Value;
+                      return new Empty();
+                  });
+
         public override Task<Int32Value> GetSheetsCount(Empty _, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
