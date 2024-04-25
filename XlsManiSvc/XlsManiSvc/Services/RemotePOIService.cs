@@ -204,5 +204,11 @@ namespace XlsManiSvc
                 GetOrCreateWrapper(context).SetCellValue(addrv);
                 return new Empty();
             });
+        public override Task<Int32Value> GetMaxRowNum(Empty _, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("GetMaxRowNum()");
+                return new Int32Value { Value = GetOrCreateWrapper(context).GetMaxRowNum() };
+            });
     }
 }

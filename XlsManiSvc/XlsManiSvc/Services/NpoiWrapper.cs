@@ -192,5 +192,13 @@ namespace XlsManiSvc
                     break;
             }
         }
+
+        public int GetMaxRowNum()
+        {
+            var count = 0;
+            var e = sheet.GetRowEnumerator();
+            while (e.MoveNext()) count++;
+            return count;
+        }
     }
 }

@@ -32,6 +32,7 @@ service RemotePOI {
   rpc GetCellValueType (CellAddress) returns (CellValueType);
   rpc GetCellValue (CellAddress) returns (CellValue);
   rpc SetCellValue (CellAddressWithValue) returns (google.protobuf.Empty);
+  rpc GetMaxRowNum (google.protobuf.Empty) returns (google.protobuf.Int32Value);
 }
 
 enum CellValueTypes {
