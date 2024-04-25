@@ -5,7 +5,11 @@ $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 require 'rpoi_services_pb'
 
 def main(host, output_path)
-  stub = Rpoi::RemotePOI::Stub.new(host, :this_channel_is_insecure)
+  stub = Rpoi::RemotePOI::Stub.new(host, :this_channel_is_insecure,
+                                   channel_args: {
+                                     # https://github.com/grpc/grpc/blob/b0de95507c51b24279c267489891cdbcc250061c/include/grpc/impl/channel_arg_names.h#L41
+                                     'grpc.max_receive_message_length': 20*1024*1024  # set max message size to 20MB
+                                   })
   stub.use_template_file(Google::Protobuf::StringValue.new value: '/mnt/est_template.xls')
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 10, col: 1, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::String, string_value: 'SDA-36'))
   stub.set_cell_value(Rpoi::CellAddressWithValue.new row: 10, col: 3, value: Rpoi::CellValue.new(valueType: Rpoi::CellValueTypes::Numeric, numeric_value: 20))
