@@ -249,7 +249,6 @@ ModelManifest.xml
 
 # editor setting files
 .idea
-.editorconfig
 .vscode
 
 # OS generated files
