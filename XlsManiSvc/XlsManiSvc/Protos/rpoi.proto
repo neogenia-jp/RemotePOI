@@ -15,6 +15,8 @@ service RemotePOI {
   rpc UploadTemplate (google.protobuf.BytesValue) returns (google.protobuf.Empty);
   rpc UseTemplateFile (google.protobuf.StringValue) returns (google.protobuf.Empty);
   rpc Download (google.protobuf.Empty) returns (google.protobuf.BytesValue);
+  rpc GetRecalculationPolicy (google.protobuf.Empty) returns (RecalculationPolicy);
+  rpc SetRecalculationPolicy (RecalculationPolicy) returns (google.protobuf.Empty);
 
   // Control the sheet.
   rpc GetSheetsCount (google.protobuf.Empty) returns (google.protobuf.Int32Value);
@@ -47,6 +49,12 @@ enum SheetState {
     Visible = 0;
     Hidden = 1;
     VeryHidden = 2;
+}
+
+enum RecalculationPolicies {
+    None = 0;
+    SetFlag = 1;
+    ForceEvaluate = 2;
 }
 
 message CellValueType {
@@ -83,3 +91,8 @@ message IndexAndState {
     int32 index = 1;
     SheetState state = 2;
 }
+
+message RecalculationPolicy {
+    RecalculationPolicies value = 1;
+}
+
