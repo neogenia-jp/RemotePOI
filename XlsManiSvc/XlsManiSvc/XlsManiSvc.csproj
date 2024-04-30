@@ -14,7 +14,7 @@
     <PackageReference Include="Endless" Version="0.7.0-alpha1" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.24.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
-    <PackageReference Include="NPOI" Version="2.6.2" />
+    <PackageReference Include="NPOI" Version="2.7.0" />
   </ItemGroup>
 
 </Project>
