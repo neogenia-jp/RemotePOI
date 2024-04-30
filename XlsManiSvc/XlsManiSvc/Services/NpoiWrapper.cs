@@ -149,7 +149,7 @@ namespace XlsManiSvc
                     break;
                 case CellValueTypes.DateTime:
                     v.DateTimeValue = cell.DateCellValue.ToTimestamp();
-                    v.StringValue = cell.DateCellValue.ToLongTimeString();
+                    v.StringValue = cell.DateCellValue?.ToLongTimeString() ?? "";
                     break;
                 case CellValueTypes.String:
                     v.StringValue = cell.StringCellValue;

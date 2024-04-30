@@ -1,4 +1,4 @@
-﻿using NPOI.SS.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +48,11 @@ namespace XlsManiSvc
         {
             var dto = new DateTimeOffset(dt, new TimeSpan(10, 0, 0));
             return new Google.Protobuf.WellKnownTypes.Timestamp() { Seconds = dto.ToUnixTimeSeconds() };
+        }
+
+        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestamp(this DateTime? dt)
+        {
+            return ToTimestamp(dt ?? default(DateTime));
         }
     }
 }
