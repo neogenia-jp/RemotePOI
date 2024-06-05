@@ -190,7 +190,7 @@ namespace XlsManiSvc
                 return new Empty();
             });
 
-        public override Task<Empty> SetRowZeroHeighAtt(IndexAndFlag arg, ServerCallContext context)
+        public override Task<Empty> SetRowZeroHeighAt(IndexAndFlag arg, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
                 _logger.LogDebug("SetRowZeroHeight({0}, {1})", arg.Index, arg.Flag);
