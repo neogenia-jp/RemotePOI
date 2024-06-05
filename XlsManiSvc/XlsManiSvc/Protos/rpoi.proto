@@ -29,8 +29,8 @@ service RemotePOI {
   rpc CloneSheet (IndexAndName) returns (google.protobuf.Int32Value);
 
   // Control rows in the sheet.
-  rpc RemoveRowAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
-  rpc SetRowHiddenAt (IndexAndFlag) returns (google.protobuf.Empty);
+  rpc ClearRowAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc SetRowZeroHeightAt (IndexAndFlag) returns (google.protobuf.Empty);
 
   // Cell value / type
   rpc GetCellValueType (CellAddress) returns (CellValueType);
