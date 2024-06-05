@@ -28,6 +28,10 @@ service RemotePOI {
   rpc SetSheetHidden (IndexAndState) returns (google.protobuf.Empty);
   rpc CloneSheet (IndexAndName) returns (google.protobuf.Int32Value);
 
+  // Control rows in the sheet.
+  rpc RemoveRowAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc SetRowHiddenAt (IndexAndFlag) returns (google.protobuf.Empty);
+
   // Cell value / type
   rpc GetCellValueType (CellAddress) returns (CellValueType);
   rpc GetCellValue (CellAddress) returns (CellValue);
@@ -86,6 +90,11 @@ message CellAddressWithValue {
 message IndexAndName {
     int32 index = 1;
     string name = 2;
+}
+
+message IndexAndFlag {
+    int32 index = 1;
+    bool flag = 2;
 }
 
 message IndexAndState {
