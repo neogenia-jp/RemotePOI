@@ -182,7 +182,22 @@ namespace XlsManiSvc
                 var ret = GetOrCreateWrapper(context).CloneSheet(arg.Index, arg.Name);
                 return new Int32Value { Value = ret };
             });
+        public override Task<Empty> RemoveRowAt(Int32Value arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("RemoveRowAt({0})", arg);
+                GetOrCreateWrapper(context).RemoveRowAt(arg.Value);
+                return new Empty();
+            });
 
+        public override Task<Empty> SetRowHiddenAt(IndexAndFlag arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("SetRowHiddenAt({0}, {1})", arg.Index, arg.Flag);
+                GetOrCreateWrapper(context).SetRowHiddenAt(arg.Index, arg.Flag);
+                return new Empty();
+            });
+    
         public override Task<CellValueType> GetCellValueType(CellAddress addr, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
