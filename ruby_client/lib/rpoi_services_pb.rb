@@ -30,6 +30,9 @@ module Rpoi
       rpc :SetSheetName, ::Rpoi::IndexAndName, ::Google::Protobuf::Empty
       rpc :SetSheetHidden, ::Rpoi::IndexAndState, ::Google::Protobuf::Empty
       rpc :CloneSheet, ::Rpoi::IndexAndName, ::Google::Protobuf::Int32Value
+      # Control rows in the sheet.
+      rpc :ClearRowAt, ::Google::Protobuf::Int32Value, ::Google::Protobuf::Empty
+      rpc :SetRowZeroHeightAt, ::Rpoi::IndexAndFlag, ::Google::Protobuf::Empty
       # Cell value / type
       rpc :GetCellValueType, ::Rpoi::CellAddress, ::Rpoi::CellValueType
       rpc :GetCellValue, ::Rpoi::CellAddress, ::Rpoi::CellValue

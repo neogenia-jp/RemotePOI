@@ -118,6 +118,18 @@ namespace XlsManiSvc
             book.SetSheetOrder(name, pos);
         }
 
+        public void ClearRowAt(int rownum)
+        {
+            var row = sheet.GetRow(rownum);
+            sheet.RemoveRow(row);
+        }
+
+        public void SetRowZeroHeightAt(int rownum, bool isHidden)
+        {
+            var row = sheet.GetRow(rownum);
+            row.ZeroHeight = isHidden;
+        }
+
         public CellValueTypes GetCellValueType(CellAddress addr) => sheet.GetRow(addr.Row).GetCell(addr.Col).GetCellValueType();
 
         public CellValue GetCellValue(CellAddress addr)

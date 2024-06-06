@@ -182,7 +182,22 @@ namespace XlsManiSvc
                 var ret = GetOrCreateWrapper(context).CloneSheet(arg.Index, arg.Name);
                 return new Int32Value { Value = ret };
             });
+        public override Task<Empty> ClearRowAt(Int32Value arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("ClearRowAt({0})", arg);
+                GetOrCreateWrapper(context).ClearRowAt(arg.Value);
+                return new Empty();
+            });
 
+        public override Task<Empty> SetRowZeroHeightAt(IndexAndFlag arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("SetRowZeroHeight({0}, {1})", arg.Index, arg.Flag);
+                GetOrCreateWrapper(context).SetRowZeroHeightAt(arg.Index, arg.Flag);
+                return new Empty();
+            });
+    
         public override Task<CellValueType> GetCellValueType(CellAddress addr, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
