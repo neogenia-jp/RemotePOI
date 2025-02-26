@@ -29,6 +29,8 @@ service RemotePOI {
   rpc CloneSheet (IndexAndName) returns (google.protobuf.Int32Value);
 
   // Control rows in the sheet.
+  rpc InsertRowAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
+  rpc CopyRow (SourceAndTarget) returns (google.protobuf.Empty);
   rpc ClearRowAt (google.protobuf.Int32Value) returns (google.protobuf.Empty);
   rpc SetRowZeroHeightAt (IndexAndFlag) returns (google.protobuf.Empty);
 
@@ -100,6 +102,11 @@ message IndexAndFlag {
 message IndexAndState {
     int32 index = 1;
     SheetState state = 2;
+}
+
+message SourceAndTarget {
+    int32 source = 1;
+    int32 target = 2;
 }
 
 message RecalculationPolicy {
