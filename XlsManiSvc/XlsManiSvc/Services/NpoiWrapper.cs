@@ -189,9 +189,18 @@ namespace XlsManiSvc
             return v;
         }
 
+        public IRow GetOrCreateRow(int rownum)
+            => sheet.GetRow(rownum) ?? sheet.CreateRow(rownum);
+
+        public ICell GetOrCreateCell(int rownum, int colnum)
+        {
+            var row = GetOrCreateRow(rownum);
+            return row.GetCell(colnum, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+        }
+
         public void SetCellValue(CellAddressWithValue addrv)
         {
-            var cell = sheet.GetCell(addrv.Row, addrv.Col);
+            var cell = GetOrCreateCell(addrv.Row, addrv.Col);
             switch (addrv.Value.ValueType)
             {
                 case CellValueTypes.Numeric:
