@@ -16,6 +16,7 @@ WORKDIR "/src/XlsManiSvc"
 RUN dotnet build "XlsManiSvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "XlsManiSvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 
 FROM base AS final
