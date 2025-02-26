@@ -118,6 +118,16 @@ namespace XlsManiSvc
             book.SetSheetOrder(name, pos);
         }
 
+        public void InsertRowAt(int rownum)
+        {
+            sheet.CreateRow(rownum);
+        }
+
+        public void CopyRow(int sourceIndex, int targetIndex)
+        {
+            sheet.CopyRow(sourceIndex, targetIndex);
+        }
+
         public void ClearRowAt(int rownum)
         {
             var row = sheet.GetRow(rownum);
@@ -160,8 +170,9 @@ namespace XlsManiSvc
                     v.StringValue = $"{cell.NumericCellValue}";
                     break;
                 case CellValueTypes.DateTime:
-                    v.DateTimeValue = cell.DateCellValue.ToTimestamp();
-                    v.StringValue = cell.DateCellValue.ToLongTimeString();
+                    var dt = cell.DateCellValue.GetValueOrDefault();
+                    v.DateTimeValue = dt.ToTimestamp();
+                    v.StringValue = dt.ToLongTimeString();
                     break;
                 case CellValueTypes.String:
                     v.StringValue = cell.StringCellValue;
