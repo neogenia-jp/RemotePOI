@@ -1,6 +1,7 @@
 # RemotePOI
 
 RemotePOI は NPOI を使った xls/xlsx ファイルの操作を提供する gRPCサービスです。
+[![build and test](https://github.com/neogenia-jp/RemotePOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/neogenia-jp/RemotePOI/actions/workflows/build-and-test.yml)
 
 ## Quick start
 
