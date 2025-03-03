@@ -1,15 +1,21 @@
 name: build and test
 
+# 参考: https://learn.microsoft.com/ja-jp/dotnet/devops/dotnet-test-github-action
+
 on:
   push:
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
     paths:
     - '**.cs'
     - '**.csproj'
 
 env:
   DOTNET_VERSION: '8.0.x' # The .NET SDK version to use
+
+defaults:
+  run:
+    working-directory: XlsManiSvc/
 
 jobs:
   build-and-test:
