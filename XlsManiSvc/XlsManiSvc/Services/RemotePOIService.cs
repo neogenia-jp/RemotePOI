@@ -231,7 +231,7 @@ namespace XlsManiSvc
         public override Task<Empty> SetCellValue(CellAddressWithValue addrv, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
-                _logger.LogDebug("SetCellValue(row:{0}, col:{1})", addrv.Row, addrv.Col, addrv.Value.Inspect());
+                _logger.LogDebug("SetCellValue(row:{0}, col:{1}, value:{2})", addrv.Row, addrv.Col, addrv.Value.Inspect());
                 GetOrCreateWrapper(context).SetCellValue(addrv);
                 return new Empty();
             });
