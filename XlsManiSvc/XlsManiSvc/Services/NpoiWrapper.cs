@@ -6,6 +6,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using NPOI.SS.UserModel;
 using NPOI.Util;
+using Google.Protobuf.WellKnownTypes;
 
 namespace XlsManiSvc
 {
@@ -166,13 +167,18 @@ namespace XlsManiSvc
             switch (v.ValueType)
             {
                 case CellValueTypes.Numeric:
+                    // 日付形式の書式が設定されていたら、日付型として扱う
+                    if (DateUtil.IsCellDateFormatted(cell))
+                    {
+                        v.ValueType = CellValueTypes.DateTime;
+                        cell.ExtractDateTimeCellValue(v);
+                        break;
+                    }
                     v.NumericValue = cell.NumericCellValue;
                     v.StringValue = $"{cell.NumericCellValue}";
                     break;
                 case CellValueTypes.DateTime:
-                    var dt = cell.DateCellValue.GetValueOrDefault();
-                    v.DateTimeValue = dt.ToTimestamp();
-                    v.StringValue = dt.ToLongTimeString();
+                    cell.ExtractDateTimeCellValue(v);
                     break;
                 case CellValueTypes.String:
                     v.StringValue = cell.StringCellValue;
@@ -205,15 +211,25 @@ namespace XlsManiSvc
             {
                 case CellValueTypes.Numeric:
                     cell.SetCellValue(addrv.Value.NumericValue);
+                    cell.SetCellType(CellType.Numeric);
                     break;
                 case CellValueTypes.String:
                     cell.SetCellValue(addrv.Value.StringValue);
+                    cell.SetCellType(CellType.String);
                     break;
                 case CellValueTypes.Boolean:
                     cell.SetCellValue(addrv.Value.BoolValue);
+                    cell.SetCellType(CellType.Boolean);
                     break;
                 case CellValueTypes.DateTime:
-                    cell.SetCellValue(DateUtil.GetExcelDate(new DateTime(addrv.Value.DateTimeValue.Seconds)));
+                    cell.SetCellValue(addrv.Value.DateTimeValue.ToDateTime());
+                    cell.SetCellType(CellType.Numeric);
+                    // 日時データの場合は書式設定をちゃんとセットしないと、内部データの数値型のまま表示されてしまう。
+                    var createHelper = book.GetCreationHelper();
+                    var cellStyle = book.CreateCellStyle();
+                    short style = createHelper.CreateDataFormat().GetFormat("yyyy/mm/dd h:mm");
+                    cellStyle.DataFormat = style;
+                    cell.CellStyle = cellStyle;
                     break;
                 case CellValueTypes.Blank:
                     cell.SetCellType(CellType.Blank);

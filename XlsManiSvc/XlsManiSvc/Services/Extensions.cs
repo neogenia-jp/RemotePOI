@@ -8,7 +8,12 @@ namespace XlsManiSvc
 {
     public static class Extensions
     {
-        public static ICell GetCell(this ISheet sheet, int r, int c) => sheet.GetRow(r).GetCell(c);
+        public static ICell GetCell(this ISheet sheet, int r, int c) 
+        {
+            var row = sheet.GetRow(r);
+            if (row == null) throw new ArgumentOutOfRangeException($"Row {r} is out of range.");
+            return row.GetCell(c);
+        }
 
         public static CellValueTypes GetCellValueType(this ICell c)
            => c.CellType switch
@@ -44,10 +49,33 @@ namespace XlsManiSvc
             return "(Unknown)";
         }
 
-        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestamp(this DateTime dt)
+        /// <summary>
+        /// cell から日時データを取り出して、v にセットする
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="v"></param>
+        public static DateTime? ExtractDateTimeCellValue(this ICell cell, CellValue v = null)
         {
-            var dto = new DateTimeOffset(dt, new TimeSpan(10, 0, 0));
-            return new Google.Protobuf.WellKnownTypes.Timestamp() { Seconds = dto.ToUnixTimeSeconds() };
+            if (!cell.DateCellValue.HasValue) return null;
+            
+        var dt =  new DateTime(cell.DateCellValue.Value.Ticks, DateTimeKind.Utc);  // 強制的にUTCとして扱う
+                if (v != null)
+                {
+                v.DateTimeValue = dt.ToTimestampEx();
+                v.StringValue = dt.ToString("s");  // ISO8601形式
+                }
+                return dt;
+        }
+
+        public static Google.Protobuf.WellKnownTypes.Timestamp ToTimestampEx(this DateTime dt)
+        {
+            if (dt.Kind == DateTimeKind.Utc)
+            {
+                // UTC だった場合はそのまま変換
+                return new Google.Protobuf.WellKnownTypes.Timestamp() { Seconds = dt.Ticks };
+            }
+            var dto = new DateTime(dt.Ticks, DateTimeKind.Utc);
+            return new Google.Protobuf.WellKnownTypes.Timestamp() { Seconds = dto.Ticks };
         }
     }
 }
