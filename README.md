@@ -1,6 +1,7 @@
 # RemotePOI
 
 RemotePOI is a gRPC service that provides for the manipulation of xls/xlsx files using NPOI.
+[![build and test](https://github.com/neogenia-jp/RemotePOI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/neogenia-jp/RemotePOI/actions/workflows/build-and-test.yml)
 
 [日本語版](./README.ja.md)
 

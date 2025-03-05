@@ -182,6 +182,22 @@ namespace XlsManiSvc
                 var ret = GetOrCreateWrapper(context).CloneSheet(arg.Index, arg.Name);
                 return new Int32Value { Value = ret };
             });
+        public override Task<Empty> InsertRowAt(Int32Value arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("InsertRowAt({0})", arg);
+                GetOrCreateWrapper(context).ClearRowAt(arg.Value);
+                return new Empty();
+            });
+
+        public override Task<Empty> CopyRow(SourceAndTarget arg, ServerCallContext context)
+            => Task.Factory.StartNew(() =>
+            {
+                _logger.LogDebug("CopyRow({0}, {1})", arg.Source, arg.Target);
+                GetOrCreateWrapper(context).CopyRow(arg.Source, arg.Target);
+                return new Empty();
+            });
+
         public override Task<Empty> ClearRowAt(Int32Value arg, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
@@ -215,7 +231,7 @@ namespace XlsManiSvc
         public override Task<Empty> SetCellValue(CellAddressWithValue addrv, ServerCallContext context)
             => Task.Factory.StartNew(() =>
             {
-                _logger.LogDebug("SetCellValue(row:{0}, col:{1})", addrv.Row, addrv.Col, addrv.Value.Inspect());
+                _logger.LogDebug("SetCellValue(row:{0}, col:{1}, value:{2})", addrv.Row, addrv.Col, addrv.Value.Inspect());
                 GetOrCreateWrapper(context).SetCellValue(addrv);
                 return new Empty();
             });
